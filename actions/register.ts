@@ -1,5 +1,6 @@
 "use server"
 
+import {getUserByEmail} from "@/data/user";
 import {RegisterSchema} from "@/schemas";
 import * as zod from "zod";
 import bcrypt from "bcrypt";
@@ -18,11 +19,7 @@ export const register = async (values: zod.infer<typeof RegisterSchema>) => {
   // auto generate salted hash
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const existingUser = await db.user.findUnique({
-    where: {
-      email
-    }
-  })
+  const existingUser = await getUserByEmail(email);
 
   if(existingUser) {
     return {error: "Email already registered!"};
