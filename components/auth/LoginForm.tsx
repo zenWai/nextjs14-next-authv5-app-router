@@ -29,11 +29,17 @@ export function LoginForm() {
     setError("");
     setSuccess("");
     startTransition(() => {
+
       login(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        if(data?.error) {
+          setError(data.error);
+        }
+      }).catch((error) => {
+        setError("An unexpected error occurred.");
+        console.log(error);
       });
-    })
+
+    });
 
   }
   return (
