@@ -37,13 +37,9 @@ export function LoginForm() {
     startTransition(() => {
 
       login(values).then((data) => {
-        if(data?.error) {
-          setError(data.error);
-        }
-      }).catch((error) => {
-        setError("An unexpected error occurred.");
-        console.log(error);
-      });
+        setError(data?.error);
+        setSuccess(data?.success);
+      })
 
     });
 

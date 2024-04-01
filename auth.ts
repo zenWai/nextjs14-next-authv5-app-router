@@ -34,13 +34,25 @@ export const {
     }
   },
   callbacks: {
+    async signIn({user, account}) {
+      // allow OAuth without email verification
+      if (account?.provider !== "credentials") return true;
+      if(!user.id) return false;
+
+      const existingUser = await getUserById(user.id);
+
+      // prevent sign in without email verification
+      if (!existingUser?.emailVerified) return false;
+
+      return true;
+    },
     async session({token, session}) {
       console.log({SessionToken: token})
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
 
-      if(token.role && session.user) {
+      if (token.role && session.user) {
         session.user.role = token.role as UserRole;
       }
       console.log({Session: session})
@@ -48,10 +60,10 @@ export const {
       return session;
     },
     async jwt({token}) {
-      if(!token.sub) return token;
+      if (!token.sub) return token;
       const existingUser = await getUserById(token.sub);
 
-      if(!existingUser) return token;
+      if (!existingUser) return token;
 
       token.role = existingUser.role;
 
