@@ -11,8 +11,14 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useState, useTransition} from "react";
 import {useForm} from "react-hook-form";
 import * as zod from "zod";
+import {useSearchParams} from "next/navigation";
 
 export function LoginForm() {
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+    ? "Email already in use with different provider!"
+    : "";
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -92,7 +98,7 @@ export function LoginForm() {
               )}
             />
           </div>
-          <FormError message={error}></FormError>
+          <FormError message={error || urlError}></FormError>
           <FormSuccess message={success}></FormSuccess>
           <Button
             disabled={isPending}
