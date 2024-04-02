@@ -17,10 +17,10 @@ export function Social() {
   };
   return (
     <div className='flex w-full items-center gap-x-2'>
-      <Button size='lg' className='w-full' variant='outline' onClick={() => onClick('google')}>
+      <Button className='w-full' onClick={() => onClick('google')} size='lg' variant='outline'>
         <FcGoogle className='h-5 w-5' />
       </Button>
-      <Button size='lg' className='w-full' variant='outline' onClick={() => onClick('github')}>
+      <Button className='w-full' onClick={() => onClick('github')} size='lg' variant='outline'>
         <FaGithub className='h-5 w-5' />
       </Button>
     </div>

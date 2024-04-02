@@ -16,7 +16,7 @@ export default function Home() {
     >
       <div className='space-y-6 text-center'>
         <h1 className={cn('text-6xl font-semibold text-white drop-shadow-md', font.className)}>
-          <span role='img' aria-label='icon'>
+          <span aria-label='icon' role='img'>
             🔐
           </span>{' '}
           Auth
@@ -24,7 +24,7 @@ export default function Home() {
         <p className='text-lg text-white'>Authentication</p>
         <div>
           <LoginButton>
-            <Button variant='secondary' size='lg'>
+            <Button size='lg' variant='secondary'>
               Sign in
             </Button>
           </LoginButton>

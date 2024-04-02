@@ -26,7 +26,7 @@ export function CardWrapper({ children, headerLabel, backButtonLabel, backButton
         </CardFooter>
       )}
       <CardFooter>
-        <BackButton label={backButtonLabel} href={backButtonHref} />
+        <BackButton href={backButtonHref} label={backButtonLabel} />
       </CardFooter>
     </Card>
   );

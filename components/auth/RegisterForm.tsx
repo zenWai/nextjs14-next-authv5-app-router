@@ -39,13 +39,13 @@ export function RegisterForm() {
   };
   return (
     <CardWrapper
-      headerLabel='Create an account'
-      backButtonLabel='Already have an account?'
       backButtonHref='/login'
+      backButtonLabel='Already have an account?'
+      headerLabel='Create an account'
       showSocial
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+        <form className='space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
           <div className='space-y-6'>
             <FormField
               control={form.control}
@@ -89,7 +89,7 @@ export function RegisterForm() {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} type='submit' className='w-full'>
+          <Button className='w-full' disabled={isPending} type='submit'>
             Create an account
           </Button>
         </form>

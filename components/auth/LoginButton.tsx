@@ -19,7 +19,7 @@ export const LoginButton = ({ children, mode = 'redirect', asChild }: LoginButto
     return <span>TODO:</span>;
   }
   return (
-    <span onClick={onClick} className='cursor-pointer'>
+    <span className='cursor-pointer' onClick={onClick}>
       {children}
     </span>
   );

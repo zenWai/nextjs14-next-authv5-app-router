@@ -12,7 +12,7 @@ export function Header({ label }: CardHeaderProps) {
   return (
     <div className='flex w-full flex-col items-center justify-center gap-y-4'>
       <h1 className={cn('text-3xl font-semibold', font.className)}>
-        <span role='img' aria-label='icon'>
+        <span aria-label='icon' role='img'>
           🔐
         </span>{' '}
         Auth

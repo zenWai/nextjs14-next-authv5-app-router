@@ -43,7 +43,7 @@ export function NewVerificationForm() {
   });
 
   return (
-    <CardWrapper headerLabel='Confirming your verification' backButtonLabel='Back to login' backButtonHref='/login'>
+    <CardWrapper backButtonHref='/login' backButtonLabel='Back to login' headerLabel='Confirming your verification'>
       <div className='flex w-full items-center justify-center'>
         {!success && !error && <BeatLoader />}
         <FormSuccess message={success} />

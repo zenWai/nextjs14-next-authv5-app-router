@@ -11,7 +11,7 @@ interface BackButtonProps {
 
 export function BackButton({ href, label }: BackButtonProps) {
   return (
-    <Button variant='link' className='w-full font-normal' size='sm' asChild>
+    <Button asChild className='w-full font-normal' size='sm' variant='link'>
       <Link href={href}>{label}</Link>
     </Button>
   );
