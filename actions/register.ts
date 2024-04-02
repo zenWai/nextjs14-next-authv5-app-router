@@ -1,10 +1,12 @@
 "use server"
 
 import {getUserByEmail} from "@/data/user";
+import {sendVerificationEmail} from "@/lib/mail";
 import {RegisterSchema} from "@/schemas";
 import * as zod from "zod";
 import bcrypt from "bcryptjs";
 import {db} from "@/lib/db";
+import {generateVerificationToken} from "@/lib/tokens";
 
 export const register = async (values: zod.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -33,7 +35,8 @@ export const register = async (values: zod.infer<typeof RegisterSchema>) => {
     }
   })
 
-  // TODO: send verification email
+  const verificationToken = await generateVerificationToken(email);
+  await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
-  return {success: "User created!"}
+  return {success: "Confirmation email sent!"};
 }

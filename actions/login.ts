@@ -1,5 +1,8 @@
 "use server"
 
+import {getUserByEmail} from "@/data/user";
+import {sendVerificationEmail} from "@/lib/mail";
+import {generateVerificationToken} from "@/lib/tokens";
 import {DEFAULT_LOGIN_REDIRECT} from "@/routes";
 import {LoginSchema} from "@/schemas";
 import {AuthError} from "next-auth";
@@ -14,6 +17,20 @@ export const login = async (values: zod.infer<typeof LoginSchema>) => {
   }
 
   const {email, password} = validatedFields.data;
+
+  const existingUser = await getUserByEmail(email);
+  if(!existingUser || !existingUser.email || !existingUser.password) {
+    return {error: "Invalid credentials"};
+  }
+
+  if(!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(email);
+
+    await sendVerificationEmail(verificationToken.email, verificationToken.token);
+
+    return {success: "Confirmation email sent!"};
+  }
+
 
   try {
     await signIn("credentials", {
