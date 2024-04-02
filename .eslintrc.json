@@ -1,3 +1,41 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "prettier", "next"],
+  "plugins": ["import", "jsx-a11y", "react-hooks", "react"],
+  "rules": {
+    "import/no-extraneous-dependencies": "error",
+    "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "jsx-a11y/accessible-emoji": "warn",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "consistent-return": "error",
+    "import/order": [
+      "error",
+      { "groups": ["builtin", "external", "internal", "parent", "sibling", "index"], "newlines-between": "always" }
+    ],
+    "react/jsx-key": "warn",
+    "react/no-array-index-key": "warn",
+    "react/self-closing-comp": "warn",
+    "import/newline-after-import": "error",
+    "import/no-duplicates": "error",
+    "import/no-unresolved": "error",
+    "import/named": "error"
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

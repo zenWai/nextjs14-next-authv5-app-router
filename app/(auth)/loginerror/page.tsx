@@ -1,7 +1,5 @@
-import {ErrorCard} from "@/components/auth/ErrorCard";
+import { ErrorCard } from '@/components/auth/ErrorCard';
 
 export default function LoginErrorPage() {
-  return (
-   <ErrorCard/>
-  )
+  return <ErrorCard />;
 }
