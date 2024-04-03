@@ -74,9 +74,7 @@ export function LoginForm() {
                     <Input {...field} disabled={isPending} placeholder='1234567' type='password' />
                   </FormControl>
                   <Button asChild className='px-0 font-normal' size='sm' variant='link'>
-                    <Link href='/reset-password'>
-                      Forgot Password?
-                    </Link>
+                    <Link href='/reset-password'>Forgot Password?</Link>
                   </Button>
                   <FormMessage />
                 </FormItem>

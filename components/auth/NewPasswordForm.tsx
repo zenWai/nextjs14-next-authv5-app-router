@@ -1,11 +1,11 @@
 'use client';
-import { newPassword } from '@/actions/new-password';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as zod from 'zod';
 
+import { newPassword } from '@/actions/new-password';
 import { CardWrapper } from '@/components/auth/CardWrapper';
 import { FormError } from '@/components/form-messages/FormError';
 import { FormSuccess } from '@/components/form-messages/FormSuccess';
@@ -40,11 +40,7 @@ export function NewPasswordForm() {
     });
   };
   return (
-    <CardWrapper
-      backButtonHref='/login'
-      backButtonLabel="Back to login"
-      headerLabel='Enter a new password'
-    >
+    <CardWrapper backButtonHref='/login' backButtonLabel='Back to login' headerLabel='Enter a new password'>
       <Form {...form}>
         <form className='space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
           <div className='space-y-6'>

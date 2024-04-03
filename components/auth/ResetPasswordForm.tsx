@@ -36,11 +36,7 @@ export function ResetPasswordForm() {
     });
   };
   return (
-    <CardWrapper
-      backButtonHref='/login'
-      backButtonLabel="Back to login"
-      headerLabel='Forgot your password?'
-    >
+    <CardWrapper backButtonHref='/login' backButtonLabel='Back to login' headerLabel='Forgot your password?'>
       <Form {...form}>
         <form className='space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
           <div className='space-y-6'>
