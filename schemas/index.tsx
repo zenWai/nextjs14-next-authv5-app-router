@@ -14,3 +14,9 @@ export const RegisterSchema = zod.object({
   password: zod.string().min(6, { message: 'Password is required' }),
   name: zod.string().min(1, { message: 'Name is required' }),
 });
+
+export const ResetPasswordSchema = zod.object({
+  email: zod.string().email({
+    message: 'Email is required',
+  }),
+});

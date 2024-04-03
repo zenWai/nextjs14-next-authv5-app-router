@@ -9,7 +9,7 @@ export const publicRoutes = ['/', '/new-verification'];
  * redirect logged-in users to /settings
  * @type {string[]}
  * */
-export const authRoutes = ['/login', '/register', '/loginerror'];
+export const authRoutes = ['/login', '/register', '/loginerror', '/reset-password'];
 
 /**
  * The prefix for API authentication routes
