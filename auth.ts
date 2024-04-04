@@ -2,6 +2,7 @@ import { UserRole } from '@prisma/client';
 import NextAuth, { type DefaultSession } from 'next-auth';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 
+import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation';
 import authConfig from '@/auth.config';
 import { db } from '@/lib/db';
 import { getUserById } from '@/data/user';
@@ -44,6 +45,16 @@ export const {
 
       // prevent sign in without email verification
       if (!existingUser?.emailVerified) return false;
+
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+        if (!twoFactorConfirmation) return false;
+
+        // Forcing two factor on every login
+        await db.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        });
+      }
 
       return true;
     },
