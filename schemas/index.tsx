@@ -5,6 +5,7 @@ export const LoginSchema = zod.object({
     message: 'Email is required',
   }),
   password: zod.string().min(1, { message: 'Password is required' }),
+  code: zod.optional(zod.string()),
 });
 
 export const RegisterSchema = zod.object({
