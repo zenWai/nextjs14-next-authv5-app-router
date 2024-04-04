@@ -1,21 +1,11 @@
 import { UserRole } from '@prisma/client';
-import NextAuth, { type DefaultSession } from 'next-auth';
+import NextAuth from 'next-auth';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation';
 import authConfig from '@/auth.config';
 import { db } from '@/lib/db';
 import { getUserById } from '@/data/user';
-
-type ExtendedUser = DefaultSession['user'] & {
-  role: 'ADMIN' | 'USER';
-};
-
-declare module 'next-auth' {
-  interface Session {
-    user: ExtendedUser;
-  }
-}
 
 export const {
   handlers: { GET, POST },
@@ -67,6 +57,10 @@ export const {
         session.user.role = token.role as UserRole;
       }
 
+      if (session.user) {
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+      }
+
       return session;
     },
     async jwt({ token }) {
@@ -76,6 +70,7 @@ export const {
       if (!existingUser) return token;
 
       token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
       return token;
     },
