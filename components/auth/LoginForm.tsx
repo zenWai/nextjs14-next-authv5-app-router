@@ -17,6 +17,7 @@ import { LoginSchema } from '@/schemas';
 
 export function LoginForm() {
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl');
   const urlError =
     searchParams.get('error') === 'OAuthAccountNotLinked' ? 'Email already in use with different provider!' : '';
 
@@ -37,7 +38,7 @@ export function LoginForm() {
     setError('');
     setSuccess('');
     startTransition(() => {
-      login(values)
+      login(values, callbackUrl)
         .then((data) => {
           if (data?.error) {
             setError(data.error);
