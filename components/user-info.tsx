@@ -41,7 +41,6 @@ export default function UserInfo({ user, label }: UserInfoProps) {
             {user?.isTwoFactorEnabled ? 'ON' : 'OFF'}
           </Badge>
         </div>
-        {/* ID */}
       </CardContent>
     </Card>
   );
