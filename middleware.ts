@@ -10,7 +10,7 @@ const { auth } = NextAuth(authConfig);
 
 const ratelimit = new Ratelimit({
   redis: kv,
-  limiter: Ratelimit.cachedFixedWindow(8, '5 s'),
+  limiter: Ratelimit.cachedFixedWindow(20, '10 s'),
 });
 
 export default auth(async (req) => {
@@ -28,22 +28,25 @@ export default auth(async (req) => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
-    if (isAuthRoute) {
-
-      if (isLoggedIn) {
-        return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-      }
-
-      const requestHeaders = new Headers(req.headers);
-      requestHeaders.set('request-ip', ip);
-      return NextResponse.next({
-        request: {
-          headers: requestHeaders,
-        },
-      });
+    if (isAuthRoute && isLoggedIn) {
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
 
     return NextResponse.next();
+  }
+
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set('request-ip', ip);
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   if (!isLoggedIn && !isPublicRoute) {
