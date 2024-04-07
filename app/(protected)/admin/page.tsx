@@ -43,6 +43,7 @@ export default function AdminPage() {
       <CardContent className='space-y-4'>
         <RoleGate allowedRole={UserRole.ADMIN}>
           <FormSuccess message='You are allowed to see this content' />
+          <p> This is a example of secret content </p>
         </RoleGate>
         <div className='flex flex-row items-center justify-between rounded-lg border p-3 shadow-md'>
           <p className='text-sm font-medium'>Admin-only API Route</p>

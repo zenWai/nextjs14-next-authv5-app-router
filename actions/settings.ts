@@ -3,6 +3,7 @@
 import bcrypt from 'bcryptjs';
 import * as zod from 'zod';
 
+import { getVerificationTokenByEmail, getVerificationTokenByWhoRequested } from '@/data/verification-token';
 import { unstable_update } from '@/auth';
 import { getUserByEmail, getUserById } from '@/data/user';
 import { currentSessionUser } from '@/lib/auth-utils';
@@ -19,7 +20,7 @@ export const settings = async (values: zod.infer<typeof SettingsSchema>) => {
 
   const dbUser = await getUserById(user.id);
 
-  if (!dbUser) {
+  if (!dbUser?.email) {
     return { error: 'Unauthorized!' };
   }
 
@@ -44,8 +45,25 @@ export const settings = async (values: zod.infer<typeof SettingsSchema>) => {
       return { error: 'Email already in use!' };
     }
 
-    const verificationToken = await generateVerificationToken(values.email);
+    /* Grace period before user can request new verification token */
+    const existingVerificationToken = await getVerificationTokenByEmail(values.email);
+    if (existingVerificationToken) {
+      const hasExpired = new Date(existingVerificationToken.expires) < new Date();
+      if (!hasExpired) {
+        return { error: 'Verification email already sent! Confirm your inbox!' };
+      }
+    }
 
+    /* Grace period before user can request new email change */
+    const verificationTokenByRequest_email_change_by = await getVerificationTokenByWhoRequested(dbUser.email);
+    if (verificationTokenByRequest_email_change_by) {
+      const hasExpired = new Date(verificationTokenByRequest_email_change_by.expires) < new Date();
+      if (!hasExpired) {
+        return { error: 'You have already requested to change your email! You need to wait 1hour to change again' };
+      }
+    }
+
+    const verificationToken = await generateVerificationToken(values.email, dbUser.email);
     await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
     return { success: 'Verification email sent!' };
