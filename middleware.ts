@@ -26,32 +26,38 @@ export default auth(async (req) => {
   const isApiAuthRoute = apiAuthPrefix.includes(nextUrl.pathname);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  if (isApiAuthRoute) {
-    return NextResponse.next();
-  }
 
-  if (isAuthRoute) {
-    if (isLoggedIn) {
-      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  if (isApiAuthRoute) {
+    if (isAuthRoute) {
+
+      if (isLoggedIn) {
+        return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      }
+
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set('request-ip', ip);
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
     }
-    const requestHeaders = new Headers(req.headers);
-    requestHeaders.set('request-ip', ip);
-    return NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
-    });
+
+    return NextResponse.next();
   }
 
   if (!isLoggedIn && !isPublicRoute) {
     let callbackUrl = nextUrl.pathname;
+
     if (nextUrl.search) {
       callbackUrl += nextUrl.search;
     }
+
     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
     return NextResponse.redirect(new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl));
   }
+
   return NextResponse.next();
 });
 

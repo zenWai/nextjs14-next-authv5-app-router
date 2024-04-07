@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "build:start": "next build && next start",
     "lint": "next lint",
     "lint:fix": "eslint . --fix",
     "prettier:check": "prettier --check .",
