@@ -28,22 +28,22 @@ export default auth(async (req) => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
-    if (isAuthRoute) {
+    return NextResponse.next();
+  }
 
-      if (isLoggedIn) {
-        return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-      }
+  if (isAuthRoute) {
 
-      const requestHeaders = new Headers(req.headers);
-      requestHeaders.set('request-ip', ip);
-      return NextResponse.next({
-        request: {
-          headers: requestHeaders,
-        },
-      });
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
 
-    return NextResponse.next();
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set('request-ip', ip);
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   if (!isLoggedIn && !isPublicRoute) {
