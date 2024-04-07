@@ -3,6 +3,7 @@
 import { AuthError } from 'next-auth';
 import * as zod from 'zod';
 
+import { getVerificationTokenByEmail } from '@/data/verification-token';
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation';
 import { getTwoFactorTokenByEmail } from '@/data/two-factor-token';
 import { db } from '@/lib/db';
@@ -28,6 +29,14 @@ export const login = async (values: zod.infer<typeof LoginSchema>, callbackUrl?:
   }
 
   if (!existingUser.emailVerified) {
+    const existingToken = await getVerificationTokenByEmail(email);
+    if (existingToken) {
+      const hasExpired = new Date(existingToken.expires) < new Date();
+      if (!hasExpired) {
+        return { error: 'Confirmation email already sent! Check your inbox!' };
+      }
+    }
+
     const verificationToken = await generateVerificationToken(email);
 
     await sendVerificationEmail(verificationToken.email, verificationToken.token);
@@ -66,6 +75,13 @@ export const login = async (values: zod.infer<typeof LoginSchema>, callbackUrl?:
         data: { userId: existingUser.id },
       });
     } else {
+      const existingTwoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
+      if (existingTwoFactorToken) {
+        const hasExpired = new Date(existingTwoFactorToken.expires) < new Date();
+        if (!hasExpired) {
+          return { twoFactor: true };
+        }
+      }
       const twoFactorToken = await generateTwoFactorToken(existingUser.email);
 
       await sendTwoFactorTokenEmail(existingUser.email, twoFactorToken.token);

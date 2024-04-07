@@ -2,6 +2,7 @@
 
 import * as zod from 'zod';
 
+import { getPasswordResetTokenByEmail } from '@/data/password-reset-token';
 import { sendPasswordResetEmail } from '@/lib/mail';
 import { generatePasswordResetToken } from '@/lib/tokens';
 import { getUserByEmail } from '@/data/user';
@@ -24,6 +25,14 @@ export const resetPassword = async (values: zod.infer<typeof ResetPasswordSchema
     return {
       error: 'Email not found!',
     };
+  }
+
+  const existingPasswordResetToken = await getPasswordResetTokenByEmail(email);
+  if (existingPasswordResetToken) {
+    const hasExpired = new Date(existingPasswordResetToken.expires) < new Date();
+    if (!hasExpired) {
+      return { error: 'Reset password email already sent! Check your inbox!' };
+    }
   }
 
   const passwordResetToken = await generatePasswordResetToken(email);
