@@ -21,3 +21,14 @@ export const getVerificationTokenByEmail = async (email: string) => {
     return null;
   }
 };
+
+export const getVerificationTokenByWhoRequested = async (request_email_change_by: string) => {
+  try {
+    const verificationToken = await db.verificationToken.findFirst({
+      where: { request_email_change_by },
+    });
+    return verificationToken;
+  } catch {
+    return null;
+  }
+};

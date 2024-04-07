@@ -24,6 +24,7 @@ model User {
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  ip                    String?
 }
 
 model Account {
@@ -46,10 +47,11 @@ model Account {
 }
 
 model VerificationToken {
-  id      String   @id @default(cuid())
-  email   String
-  token   String   @unique
-  expires DateTime
+  id                      String   @id @default(cuid())
+  email                   String
+  token                   String   @unique
+  expires                 DateTime
+  request_email_change_by String?
 
   @@unique([email, token])
 }

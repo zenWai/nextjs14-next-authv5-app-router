@@ -25,6 +25,8 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
+    "@upstash/ratelimit": "^1.0.3",
+    "@vercel/kv": "^1.0.1",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

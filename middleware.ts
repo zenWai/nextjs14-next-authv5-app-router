@@ -1,25 +1,46 @@
 import NextAuth from 'next-auth';
+import { NextResponse } from 'next/server';
+import { Ratelimit } from '@upstash/ratelimit';
+import { kv } from '@vercel/kv';
 
 import { apiAuthPrefix, authRoutes, DEFAULT_LOGIN_REDIRECT, publicRoutes } from '@/routes';
 import authConfig from '@/auth.config';
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.cachedFixedWindow(8, '5 s'),
+});
+
+export default auth(async (req) => {
   const { nextUrl } = req;
+  const ip = req.ip ?? '127.0.0.1';
+  const { success } = await ratelimit.limit(ip);
+  if (!success) {
+    return new NextResponse('You are being rate limited due to too many requests. Try again later!', { status: 429 });
+  }
+
   const isLoggedIn = !!req.auth;
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+
+  const isApiAuthRoute = apiAuthPrefix.includes(nextUrl.pathname);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   if (isApiAuthRoute) {
-    return undefined;
+    return NextResponse.next();
   }
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-    return undefined;
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set('request-ip', ip);
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
   if (!isLoggedIn && !isPublicRoute) {
@@ -29,19 +50,12 @@ export default auth((req) => {
     }
     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
-    return Response.redirect(new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl));
+    return NextResponse.redirect(new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl));
   }
-
-  return undefined;
+  return NextResponse.next();
 });
 
 // Optionally, don't invoke Middleware on some paths
 export const config = {
-  matcher: [
-    // Exclude files with a "." followed by an extension, which are typically static files.
-    // Exclude files in the _next directory, which are Next.js internals.
-    '/((?!.+\\.[\\w]+$|_next).*)',
-    // Re-include any files in the api or trpc folders that might have an extension
-    '/(api|trpc)(.*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)', '/api/admin'],
 };
