@@ -1,8 +1,8 @@
 'use client';
 
 import { BackButton } from '@/components/auth/BackButton';
-import { Header } from '@/components/auth/Header';
-import { Social } from '@/components/auth/Social';
+import { AuthFormHeader } from '@/components/auth/AuthFormHeader';
+import { SocialButtons } from '@/components/auth/SocialButtons';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 
 interface CardWrapperProps {
@@ -17,12 +17,12 @@ export function CardWrapper({ children, headerLabel, backButtonLabel, backButton
   return (
     <Card className='w-[400px] shadow-md'>
       <CardHeader>
-        <Header label={headerLabel} />
+        <AuthFormHeader label={headerLabel} />
       </CardHeader>
       <CardContent>{children}</CardContent>
       {showSocial && (
         <CardFooter>
-          <Social />
+          <SocialButtons />
         </CardFooter>
       )}
       <CardFooter>
