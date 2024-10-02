@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { SessionProvider } from 'next-auth/react';
 
 import { Toaster } from '@/components/ui/sonner';
 
@@ -19,13 +18,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SessionProvider>
-      <html lang='en'>
-        <body className={inter.className}>
-          <Toaster />
-          {children}
-        </body>
-      </html>
-    </SessionProvider>
+    <html lang='en'>
+      <body className={inter.className}>
+        <Toaster />
+        {children}
+      </body>
+    </html>
   );
 }

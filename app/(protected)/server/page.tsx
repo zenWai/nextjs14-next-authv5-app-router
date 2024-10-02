@@ -1,4 +1,4 @@
-import UserInfo from '@/components/user-info';
+import UserInfo from '@/components/UserInfo';
 import { currentSessionUser } from '@/lib/auth-utils';
 
 export default async function ServerPage() {

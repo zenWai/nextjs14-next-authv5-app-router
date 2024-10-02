@@ -1,12 +1,11 @@
-'use client';
-import UserInfo from '@/components/user-info';
-import { useCurrentUser } from '@/hooks/use-current-user';
+import { SessionProvider } from 'next-auth/react';
+
+import ClientComponent from '@/app/(protected)/client/client-component';
 
 export default function ClientPage() {
-  const userSession = useCurrentUser();
   return (
-    <div className=''>
-      <UserInfo label='💃Client component' user={userSession} />
-    </div>
+    <SessionProvider>
+      <ClientComponent />
+    </SessionProvider>
   );
 }

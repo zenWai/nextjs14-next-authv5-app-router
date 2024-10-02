@@ -14,28 +14,25 @@ import { generateVerificationToken } from '@/lib/tokens';
 export const register = async (values: zod.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
 
+  if (!validatedFields.success) return { error: 'Invalid fields' };
+
+  const { email, password, name } = validatedFields.data;
+
   const headersList = headers();
   const userIp = headersList.get('request-ip');
   const hashedIp = await hashIp(userIp);
 
-  if (userIp === '127.0.0.1' || !userIp || hashedIp === 'unknown') {
-    return { error: 'Sorry! Something went wrong. Please try again later.' };
+  /* If we can not determine the IP of the user, fails to register */
+  if ((process.env.NODE_ENV === 'production' && userIp === '127.0.0.1') || !userIp || hashedIp === 'unknown') {
+    return { error: 'Sorry! Something went wrong. Could not identify you as user' };
   }
 
   const existingAccounts = await db.user.count({
     where: { ip: hashedIp },
   });
-  if (existingAccounts >= 2) {
+  if (process.env.NODE_ENV === 'production' && existingAccounts >= 2) {
     return { error: 'You are not allowed to register more accounts on this app preview' };
   }
-
-  if (!validatedFields.success) {
-    return {
-      error: 'Invalid fields',
-    };
-  }
-
-  const { email, password, name } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
   if (existingUser) {

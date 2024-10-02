@@ -1,7 +1,7 @@
 import { UserRole } from '@prisma/client';
 
-import { AdminOnlyRhAndSa } from '@/app/(protected)/_components/admin-only-rh-and-sa';
-import { RoleGate } from '@/components/auth/RoleGate';
+import { AdminOnlyRhAndSa } from '@/components/admin-only-rh-and-sa';
+import { RoleGate } from '@/components/RoleGate';
 import { FormSuccess } from '@/components/form-messages/FormSuccess';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 

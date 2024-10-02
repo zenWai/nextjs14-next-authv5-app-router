@@ -1,15 +1,20 @@
-'use server';
+import 'server-only';
 import crypto from 'crypto';
 
+import type { UserRole } from '@prisma/client';
+
+import type { ExtendedUser } from '@/next-auth';
 import { auth } from '@/auth';
 
-export const currentSessionUser = async () => {
+/** To be used in server components */
+export const currentSessionUser = async (): Promise<ExtendedUser | undefined> => {
   const session = await auth();
 
   return session?.user;
 };
 
-export const currentSessionRole = async () => {
+/** To be used in server components */
+export const currentSessionRole = async (): Promise<UserRole | undefined> => {
   const session = await auth();
 
   return session?.user?.role;
