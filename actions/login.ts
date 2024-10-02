@@ -85,7 +85,7 @@ export const login = async (values: zod.infer<typeof LoginSchema>, callbackUrl?:
           where: { id: existingConfirmation.id },
         });
       }
-
+      // consumed by the signIn callback
       await db.twoFactorConfirmation.create({
         data: { userId: existingUser.id },
       });
