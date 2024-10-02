@@ -2,6 +2,7 @@
 
 import { AuthError } from 'next-auth';
 import * as zod from 'zod';
+import bcrypt from 'bcryptjs';
 
 import { getVerificationTokenByEmail } from '@/data/verification-token';
 import { getTwoFactorConfirmationByUserId } from '@/data/two-factor-confirmation';
@@ -28,6 +29,15 @@ export const login = async (values: zod.infer<typeof LoginSchema>, callbackUrl?:
     return { error: 'Invalid credentials' };
   }
 
+  // Verify password before proceeding with any other checks
+  const passwordsMatch = await bcrypt.compare(password, existingUser.password);
+  if (!passwordsMatch) {
+    return { error: 'Invalid credentials' };
+  }
+
+  /** Confirmation email token recently sent?
+   *  if not, generates and send email
+   */
   if (!existingUser.emailVerified) {
     const existingToken = await getVerificationTokenByEmail(email);
     if (existingToken) {
@@ -44,7 +54,12 @@ export const login = async (values: zod.infer<typeof LoginSchema>, callbackUrl?:
     return { success: 'Confirmation email sent!' };
   }
 
+  /** 2FA code logic
+   * Currently if current token is unexpired it does not re-send a new one
+   * Reduce db calls and e-mail sents on this preview
+   */
   if (existingUser.isTwoFactorEnabled && existingUser.email) {
+    // If user is already at the 2fa on loginForm
     if (code) {
       const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
       if (!twoFactorToken) {
@@ -75,6 +90,7 @@ export const login = async (values: zod.infer<typeof LoginSchema>, callbackUrl?:
         data: { userId: existingUser.id },
       });
     } else {
+      // return { twoFactor: true }; sends the user to the 2fa on loginForm
       const existingTwoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
       if (existingTwoFactorToken) {
         const hasExpired = new Date(existingTwoFactorToken.expires) < new Date();
