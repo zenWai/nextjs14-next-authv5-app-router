@@ -1,10 +1,10 @@
-'use client';
+import 'server-only';
 
 import { FaUser } from 'react-icons/fa';
 import { ExitIcon } from '@radix-ui/react-icons';
 
-import { LogoutButton } from '@/components/auth/LogoutButton';
-import { useCurrentUser } from '@/hooks/use-current-user';
+import { currentSessionUser } from '@/lib/auth-utils';
+import { LogoutButton } from '@/components/LogoutButton';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
-export function UserButton() {
-  const user = useCurrentUser();
+export async function UserAvatarMenu() {
+  const user = await currentSessionUser();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
