@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import * as zod from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { SettingsSchema } from '@/schemas';
 
-export function SettingsForm({user}:{user:ExtendedUser}) {
+export function SettingsForm({ user }: { user: ExtendedUser }) {
   const { update } = useSession();
 
   const [error, setError] = useState<string | undefined>();
@@ -185,5 +185,5 @@ export function SettingsForm({user}:{user:ExtendedUser}) {
         </form>
       </Form>
     </>
-  )
+  );
 }
