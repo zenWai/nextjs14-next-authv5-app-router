@@ -8,12 +8,12 @@ import { signIn } from 'next-auth/react';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 import { Button } from '@/components/ui/button';
 
-export function Social() {
+export function SocialButtons() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
   const onClick = (provider: 'google' | 'github') => {
     signIn(provider, {
-      callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
   };
   return (
