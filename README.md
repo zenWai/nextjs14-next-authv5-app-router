@@ -3,6 +3,7 @@ Key Features:
 - 🚀 Next.js 14 with server actions
 - 🔑 Credentials Provider
 - 🌐 OAuth Provider (Social login with Google & GitHub)
+- 🛑 Registration Restriction, maximum of 2 accounts per user
 - 🔒 Forgot password functionality
 - ✉️ Email verification
 - 📱 Two factor verification (2FA)
