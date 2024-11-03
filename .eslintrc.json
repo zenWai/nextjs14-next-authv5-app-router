@@ -27,6 +27,14 @@
       }
     ]
   },
+  "overrides": [
+    {
+      "files": ["e2e-tests/**/*"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ],
   "env": {
     "browser": true,
     "es6": true,

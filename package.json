@@ -31,6 +31,7 @@
     "bcryptjs": "2.4.3",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
+    "dotenv": "^16.4.5",
     "next": "14.2.13",
     "next-auth": "5.0.0-beta.22",
     "next-themes": "0.3.0",
@@ -48,6 +49,7 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.47.2",
     "@types/bcrypt": "5.0.2",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "22.7.4",
