@@ -23,11 +23,7 @@ export const register = async (values: zod.infer<typeof RegisterSchema>) => {
   const hashedIp = await hashIp(userIp);
 
   /* If we can not determine the IP of the user, fails to register */
-  if (
-    (!process.env.CI && process.env.NODE_ENV === 'production' && userIp === '127.0.0.1') ||
-    !userIp ||
-    hashedIp === 'unknown'
-  ) {
+  if (!userIp || hashedIp === 'unknown') {
     return { error: 'Sorry! Something went wrong. Could not identify you as a human' };
   }
 
