@@ -43,7 +43,7 @@ export const resetPassword = async (values: zod.infer<typeof ResetPasswordSchema
     }
   }
 
-  const passwordResetToken = await generatePasswordResetToken(email);
+  const passwordResetToken = await generatePasswordResetToken(email, existingUser.id);
 
   await sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token);
 

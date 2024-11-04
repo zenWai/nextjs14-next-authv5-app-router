@@ -36,3 +36,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /.idea/
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/scripts/
+/tests-examples/
+/allure-results/
+/allure-report/

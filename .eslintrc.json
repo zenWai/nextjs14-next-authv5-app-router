@@ -27,6 +27,15 @@
       }
     ]
   },
+  "overrides": [
+    {
+      "files": ["e2e-tests/**/*", "allure-report/**/*"],
+      "rules": {
+        "no-console": "off",
+        "consistent-return": "off"
+      }
+    }
+  ],
   "env": {
     "browser": true,
     "es6": true,

@@ -47,7 +47,7 @@ export const login = async (values: zod.infer<typeof LoginSchema>, callbackUrl?:
       }
     }
 
-    const verificationToken = await generateVerificationToken(email);
+    const verificationToken = await generateVerificationToken(email, existingUser.id);
 
     await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
@@ -98,7 +98,7 @@ export const login = async (values: zod.infer<typeof LoginSchema>, callbackUrl?:
           return { twoFactor: true };
         }
       }
-      const twoFactorToken = await generateTwoFactorToken(existingUser.email);
+      const twoFactorToken = await generateTwoFactorToken(existingUser.email, existingUser.id);
 
       await sendTwoFactorTokenEmail(existingUser.email, twoFactorToken.token);
 
