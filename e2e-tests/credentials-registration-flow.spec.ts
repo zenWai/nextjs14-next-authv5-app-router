@@ -3,7 +3,7 @@ import { test, expect, type Page } from '@playwright/test';
 import { TEST_CONFIG } from '@/e2e-tests/config/test-config';
 import { cleanupMailsacInbox, extractVerificationToken, getEmailContent } from '@/e2e-tests/helpers/mailsac/mailsac';
 import { fillLoginForm, fillRegistrationForm } from '@/e2e-tests/helpers/tests';
-import { cleanupTestUserFromDB } from '@/e2e-tests/helpers/helper-functions';
+import { cleanupLocalhostTestAccounts, cleanupTestUserFromDB } from '@/e2e-tests/helpers/helper-functions';
 
 test.describe('User Registration and Email Verification Flow', () => {
   const { MAILSAC_API_KEY, TEST_EMAIL, TEST_PASSWORD, TEST_NAME } = TEST_CONFIG;
@@ -12,6 +12,7 @@ test.describe('User Registration and Email Verification Flow', () => {
     const mailsacResponseStatus = await cleanupMailsacInbox(TEST_EMAIL, MAILSAC_API_KEY);
     expect(mailsacResponseStatus).toBe(204);
     await cleanupTestUserFromDB(TEST_EMAIL);
+    await cleanupLocalhostTestAccounts();
   }
 
   async function registerNewUser(page: Page) {

@@ -1,3 +1,4 @@
+import { hashIp } from '@/lib/auth-utils';
 import { UserRole, Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
@@ -72,6 +73,28 @@ export async function createCredentialsTestUser(
     console.log(`Created test user: ${email}`);
   } catch (error) {
     console.error('Error creating test user with 2FA:', error);
+    throw error;
+  }
+}
+
+/**
+ * Cleans up all test accounts that were created with localhost IP (127.0.0.1).
+ * Designed to be run before registration tests to ensure a clean test state.
+ *
+ * @returns Promise<number> - Number of accounts deleted
+ * @throws Error - If database operation fails
+ */
+export async function cleanupLocalhostTestAccounts(): Promise<void> {
+  try {
+    const hashedLocalhost = await hashIp('127.0.0.1');
+
+    await db.user.deleteMany({
+      where: {
+        ip: hashedLocalhost,
+      },
+    });
+  } catch (error) {
+    console.error('Error cleaning up localhost test accounts:', error);
     throw error;
   }
 }
