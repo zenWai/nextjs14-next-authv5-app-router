@@ -1,0 +1,81 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          AUTH_GITHUB_CLIENT_SECRET: ${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}
+          AUTH_GITHUB_CLIENT_ID: ${{ secrets.AUTH_GITHUB_CLIENT_ID }}
+          AUTH_GOOGLE_CLIENT_SECRET: ${{ secrets.AUTH_GOOGLE_CLIENT_SECRET }}
+          AUTH_GOOGLE_CLIENT_ID: ${{ secrets.AUTH_GOOGLE_CLIENT_ID }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          MAILSAC_API_KEY: ${{ secrets.MAILSAC_API_KEY }}
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+          KV_REST_API_READ_ONLY_TOKEN: ${{ secrets.KV_REST_API_READ_ONLY_TOKEN }}
+          KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+          KV_REST_API_URL: ${{ secrets.KV_REST_API_URL }}
+          KV_URL: ${{ secrets.KV_URL }}
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      # Setup Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      # Upload to GitHub Pages
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: playwright-report
+
+  # Deploy job
+  deploy:
+    needs: test # Wait for test job to complete
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # Only deploy on main branch
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
