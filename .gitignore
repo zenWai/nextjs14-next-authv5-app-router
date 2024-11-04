@@ -43,3 +43,5 @@ node_modules/
 /playwright/.cache/
 /scripts/
 /tests-examples/
+/allure-results/
+/allure-report/
