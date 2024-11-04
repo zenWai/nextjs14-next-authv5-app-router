@@ -7,7 +7,7 @@ import { getVerificationTokenByEmail } from '@/data/verification-token';
 import { db } from '@/lib/db';
 import { getPasswordResetTokenByEmail } from '@/data/password-reset-token';
 
-export const generateTwoFactorToken = async (email: string) => {
+export const generateTwoFactorToken = async (email: string, userId: string) => {
   const token = crypto.randomInt(100_000, 1_000_000).toString();
   const expires = new Date(new Date().getTime() + 3600 * 1000); // 1hr
 
@@ -23,13 +23,14 @@ export const generateTwoFactorToken = async (email: string) => {
       email,
       token,
       expires,
+      userId,
     },
   });
 
   return twoFactorToken;
 };
 
-export const generatePasswordResetToken = async (email: string) => {
+export const generatePasswordResetToken = async (email: string, userId: string) => {
   const token = uuidv4();
   const expires = new Date(new Date().getTime() + 3600 * 1000); // 1hr
 
@@ -46,13 +47,14 @@ export const generatePasswordResetToken = async (email: string) => {
       email,
       token,
       expires,
+      userId,
     },
   });
 
   return passwordResetToken;
 };
 
-export const generateVerificationToken = async (email: string, request_email_change_by?: string) => {
+export const generateVerificationToken = async (email: string, userId: string, request_email_change_by?: string) => {
   const token = uuidv4();
   const expires = new Date(new Date().getTime() + 3600 * 1000); // 1hr
 
@@ -69,6 +71,7 @@ export const generateVerificationToken = async (email: string, request_email_cha
       email,
       token,
       expires,
+      userId,
       request_email_change_by,
     },
   });

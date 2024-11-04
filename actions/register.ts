@@ -34,6 +34,7 @@ export const register = async (values: zod.infer<typeof RegisterSchema>) => {
     return { error: 'You are not allowed to register more accounts on this app preview' };
   }
 
+  //TODO: Single Query Approach using Prisma Error code or upsert approach
   const existingUser = await getUserByEmail(email);
   if (existingUser) {
     return { error: 'Email already registered!' };
@@ -41,16 +42,22 @@ export const register = async (values: zod.infer<typeof RegisterSchema>) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await db.user.create({
+  const createdUser = await db.user.create({
     data: {
       name,
       email,
       password: hashedPassword,
       ip: hashedIp,
     },
+    select: {
+      id: true,
+      email: true,
+    },
   });
 
-  const verificationToken = await generateVerificationToken(email);
+  if (!createdUser?.id || !createdUser?.email) return { error: 'Something went wrong!' };
+
+  const verificationToken = await generateVerificationToken(createdUser.email, createdUser.id);
   await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
   return { success: 'Confirmation email sent!' };

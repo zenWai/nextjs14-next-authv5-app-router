@@ -63,7 +63,7 @@ export const settings = async (values: zod.infer<typeof SettingsSchema>) => {
       }
     }
 
-    const verificationToken = await generateVerificationToken(values.email, dbUser.email);
+    const verificationToken = await generateVerificationToken(values.email, dbUser.id, dbUser.email);
     await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
     return { success: 'Verification email sent!' };
