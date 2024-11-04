@@ -29,9 +29,10 @@
   },
   "overrides": [
     {
-      "files": ["e2e-tests/**/*"],
+      "files": ["e2e-tests/**/*", "allure-report/**/*"],
       "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "consistent-return": "off"
       }
     }
   ],
