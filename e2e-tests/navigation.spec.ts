@@ -5,7 +5,7 @@ import { cleanupTestUserFromDB, createCredentialsTestUser } from '@/e2e-tests/he
 import { fillLoginForm } from '@/e2e-tests/helpers/tests';
 
 test.describe('Authentication-based Navigation and Routing Tests', () => {
-  const { TEST_EMAIL, TEST_PASSWORD, TEST_NAME,  } = TEST_CONFIG;
+  const { TEST_EMAIL, TEST_PASSWORD, TEST_NAME } = TEST_CONFIG;
   const protectedRoutes = ['/admin', '/client', '/server', '/settings'];
   const authRoutes = ['/', '/login', '/register', '/loginerror', '/reset-password', '/new-password'];
 

@@ -51,8 +51,7 @@ test.describe('User Registration and Email Verification Flow', () => {
     });
 
     await test.step('Verify confirmation requirement message', async () => {
-      await expect(
-        page.getByText('Confirmation email already sent! Check your inbox!', { exact: true })).toBeVisible({
+      await expect(page.getByText('Confirmation email already sent! Check your inbox!', { exact: true })).toBeVisible({
         timeout: 5000,
       });
     });
@@ -67,8 +66,7 @@ test.describe('User Registration and Email Verification Flow', () => {
       expect(verificationToken).toBeTruthy();
 
       await page.goto(`/new-verification?token=${verificationToken}`);
-      await expect(
-        page.getByText('Email verified!')).toBeVisible();
+      await expect(page.getByText('Email verified!')).toBeVisible();
     });
 
     await test.step('Navigate to login', async () => {

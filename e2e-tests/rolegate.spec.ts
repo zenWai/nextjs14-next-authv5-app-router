@@ -46,9 +46,7 @@ test.describe('Role-based Access Control Tests', () => {
     if (isAdmin) {
       expect(responseText).toContain(ADMIN_CONTENT);
     } else {
-      expect(responseText).not.toContain(
-        ADMIN_CONTENT
-      );
+      expect(responseText).not.toContain(ADMIN_CONTENT);
     }
 
     await checkJSBundlesForSensitiveData(page);
@@ -73,7 +71,8 @@ test.describe('Role-based Access Control Tests', () => {
     await expect(
       page.locator('[data-sonner-toast] [data-title]', {
         hasText: toastText,
-      })).toBeVisible();
+      })
+    ).toBeVisible();
   }
 
   async function checkJSBundlesForSensitiveData(page: Page) {
@@ -92,9 +91,7 @@ test.describe('Role-based Access Control Tests', () => {
       const response = await page.request.get(url);
       const content = await response.text();
 
-      expect(content).not.toContain(
-        'This is a example of secret content'
-      );
+      expect(content).not.toContain('This is a example of secret content');
     }
 
     bundleChecksCompleted = true;
