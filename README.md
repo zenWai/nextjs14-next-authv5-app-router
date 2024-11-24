@@ -8,6 +8,7 @@ Key Features:
 - 🔐 Next-auth v5 (Auth.js)
 - 🚀 Next.js 14 with server actions
 - 🔑 Credentials Provider
+- 🪄 Magic-Link Authentication
 - 🌐 OAuth Provider (Social login with Google & GitHub)
 - 🛑 Registration Restriction, maximum of 2 accounts per user
 - 🔒 Forgot password functionality
@@ -23,6 +24,7 @@ Key Features:
 - 👑 Render content for admins using RoleGate component
 - 📈 next-auth session
 - 🔄 next-auth callbacks
+- 💎 CustomAdapter extends PrismaAdapter
 - 🖥️ Example with server component
 - 💻 Example with client component
 - 🛡️ Protect API Routes for admins only
