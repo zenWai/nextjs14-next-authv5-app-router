@@ -78,7 +78,7 @@ export async function getEmailContent(
  * @param emailContent The raw email content
  * @returns The verification token
  */
-export async function extractVerificationToken(emailContent: string): Promise<string> {
+export async function extractCustomVerificationToken(emailContent: string): Promise<string> {
   // Look for the token in the verification URL
   const tokenMatch = emailContent.match(/token=([0-9a-f-]+)/i);
 

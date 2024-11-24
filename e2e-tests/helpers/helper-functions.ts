@@ -1,8 +1,6 @@
-import crypto from 'crypto';
-
 import { UserRole, Prisma } from '@prisma/client';
-import bcrypt from 'bcryptjs';
 
+import { hashIp, hashPassword } from '@/lib/crypto/hash-edge-compatible';
 import { db } from '@/lib/db';
 
 /**
@@ -59,7 +57,7 @@ export async function createCredentialsTestUser(
       await cleanupTestUserFromDB(email);
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     const userData: Prisma.UserCreateInput = {
       name,
@@ -87,7 +85,7 @@ export async function createCredentialsTestUser(
  */
 export async function cleanupLocalhostTestAccounts(): Promise<void> {
   try {
-    const hashedLocalhost = crypto.createHash('sha256').update('127.0.0.1').digest('hex');
+    const hashedLocalhost = await hashIp('127.0.0.1');
 
     await db.user.deleteMany({
       where: {
