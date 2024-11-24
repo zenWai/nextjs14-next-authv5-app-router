@@ -1,25 +1,16 @@
-import { SessionProvider } from 'next-auth/react';
-
-import { SettingsForm } from '@/app/(protected)/settings/SettingsForm';
-import { auth } from '@/auth';
+import { SettingsForm } from '@/components/forms/SettingsForm';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { currentSessionUser } from '@/lib/auth/auth-utils';
 
 export default async function SettingsPage() {
-  const session = await auth();
-  const user = session?.user;
+  const user = await currentSessionUser();
 
   return (
-    <Card className='w-[600px'>
+    <Card className='w-[600px]'>
       <CardHeader>
         <p className='text-center text-2xl font-semibold'>Settings</p>
       </CardHeader>
-      <CardContent>
-        {user && (
-          <SessionProvider>
-            <SettingsForm user={user} />
-          </SessionProvider>
-        )}
-      </CardContent>
+      <CardContent>{user && <SettingsForm user={user} />}</CardContent>
     </Card>
   );
 }

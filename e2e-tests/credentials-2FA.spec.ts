@@ -4,6 +4,7 @@ import { TEST_CONFIG } from '@/e2e-tests/config/test-config';
 import { cleanupTestUserFromDB, createCredentialsTestUser } from '@/e2e-tests/helpers/helper-functions';
 import { cleanupMailsacInbox, getEmailContent } from '@/e2e-tests/helpers/mailsac/mailsac';
 import { fillLoginForm } from '@/e2e-tests/helpers/tests';
+import { messages } from '@/lib/constants/messages/actions/messages';
 
 test.describe('2FA Authentication Flow', () => {
   const { MAILSAC_API_KEY, TEST_EMAIL, TEST_PASSWORD, TEST_NAME } = TEST_CONFIG;
@@ -47,7 +48,7 @@ test.describe('2FA Authentication Flow', () => {
   }
 
   async function submitTwoFactorCode(page: Page, code: string) {
-    await page.locator('input[name="code"]').fill(code);
+    await page.locator('input[name="twoFactorCode"]').fill(code);
     await page.locator('button[type="submit"]').click();
   }
 
@@ -78,7 +79,7 @@ test.describe('2FA Authentication Flow', () => {
     await test.step('Attempt login with invalid 2FA code', async () => {
       await initiateLogin(page);
       await submitTwoFactorCode(page, '000000');
-      await expect(page.getByText('Invalid code')).toBeVisible();
+      await expect(page.getByText(messages.login.errors.TWO_FACTOR_CODE_INVALID)).toBeVisible();
     });
   });
 });

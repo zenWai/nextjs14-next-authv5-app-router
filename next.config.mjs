@@ -1,10 +1,9 @@
-/** @type {import('next').NextConfig} */
 const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-inline' 'unsafe-eval';
     connect-src 'self';
     style-src 'self' 'unsafe-inline';
-    img-src 'self';
+    img-src 'self' data: https://*.googleusercontent.com;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
@@ -19,6 +18,7 @@ const cspHeader = `
   .replace(/\s{2,}/g, ' ') // Collapse multiple spaces into one.
   .trim();
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   async headers() {
     return [

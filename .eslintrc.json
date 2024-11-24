@@ -2,16 +2,41 @@
   "extends": ["next/core-web-vitals", "prettier", "next"],
   "plugins": ["import", "jsx-a11y", "react-hooks", "react"],
   "rules": {
+    "react/function-component-definition": [
+      "warn",
+      {
+        "namedComponents": "arrow-function"
+      }
+    ],
+    "react/jsx-pascal-case": "warn",
+    "import/no-anonymous-default-export": "warn",
     "import/no-extraneous-dependencies": "error",
-    "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".jsx", ".tsx"]
+      }
+    ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "jsx-a11y/accessible-emoji": "warn",
-    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-console": [
+      "error",
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
     "consistent-return": "error",
     "import/order": [
       "error",
-      { "groups": ["builtin", "external", "internal", "parent", "sibling", "index"], "newlines-between": "always" }
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
     ],
     "react/jsx-key": "warn",
     "react/no-array-index-key": "warn",
@@ -29,10 +54,16 @@
   },
   "overrides": [
     {
-      "files": ["e2e-tests/**/*", "allure-report/**/*"],
+      "files": ["e2e-tests/**/*", "allure-report/**/*", "app/**/*.{js,jsx,ts,tsx}"],
       "rules": {
         "no-console": "off",
-        "consistent-return": "off"
+        "consistent-return": "off",
+        "react/function-component-definition": [
+          "warn",
+          {
+            "namedComponents": "function-declaration"
+          }
+        ]
       }
     }
   ],

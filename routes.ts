@@ -5,11 +5,19 @@
 export const publicRoutes = ['/new-verification'];
 
 /**
- * These routes are used for authentication
+ * These routes are used for authentication,
  * redirect logged-in users to /settings
  * @type {string[]}
  * */
-export const authRoutes = ['/', '/login', '/register', '/loginerror', '/reset-password', '/new-password'];
+export const authRoutes = [
+  '/',
+  '/login',
+  '/register',
+  '/loginerror',
+  '/reset-password',
+  '/new-password',
+  '/login/magic-link',
+];
 
 /**
  * The prefix for API authentication routes
@@ -24,3 +32,9 @@ export const apiAuthPrefix = '/api/auth';
  * @type {string}
  * */
 export const DEFAULT_LOGIN_REDIRECT = '/settings';
+
+/**
+ * Default Allowed Redirects from callbackUrl searchParams
+ * @type {string}
+ * */
+export const ALLOWED_REDIRECTS = ['/server', '/admin', '/client', '/settings'];

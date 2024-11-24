@@ -4,6 +4,7 @@ import { TEST_CONFIG } from '@/e2e-tests/config/test-config';
 import { cleanupTestUserFromDB, createCredentialsTestUser } from '@/e2e-tests/helpers/helper-functions';
 import { cleanupMailsacInbox, getEmailContent } from '@/e2e-tests/helpers/mailsac/mailsac';
 import { fillLoginForm } from '@/e2e-tests/helpers/tests';
+import { messages } from '@/lib/constants/messages/actions/messages';
 
 test.describe('Password Reset Flow', () => {
   const { MAILSAC_API_KEY, TEST_EMAIL, TEST_PASSWORD, TEST_NAME } = TEST_CONFIG;
@@ -34,7 +35,7 @@ test.describe('Password Reset Flow', () => {
 
     expect(response.status()).toBe(200);
 
-    await expect(page.getByText('Reset email sent!')).toBeVisible();
+    await expect(page.getByText(messages.reset_password.success.PASSWORD_RESET_EMAIL_SENT)).toBeVisible();
   }
 
   async function getResetToken(): Promise<string> {
@@ -91,7 +92,7 @@ test.describe('Password Reset Flow', () => {
     await test.step('Process reset token and change password', async () => {
       const resetToken = await getResetToken();
       await resetPassword(page, resetToken);
-      await expect(page.getByText('Password updated!')).toBeVisible();
+      await expect(page.getByText(messages.new_password.success.UPDATE_SUCCESSFUL)).toBeVisible();
     });
 
     await test.step('Should be able to login with new password', async () => {
@@ -102,6 +103,6 @@ test.describe('Password Reset Flow', () => {
   test('Should show error for invalid reset token', async ({ page }) => {
     await resetPassword(page, 'invalid-token');
 
-    await expect(page.getByText('Invalid token!')).toBeVisible();
+    await expect(page.getByText(messages.new_password.errors.INVALID_TOKEN)).toBeVisible();
   });
 });

@@ -1,9 +1,14 @@
 import { test, expect, type Page } from '@playwright/test';
 
 import { TEST_CONFIG } from '@/e2e-tests/config/test-config';
-import { cleanupMailsacInbox, extractVerificationToken, getEmailContent } from '@/e2e-tests/helpers/mailsac/mailsac';
-import { fillLoginForm, fillRegistrationForm } from '@/e2e-tests/helpers/tests';
 import { cleanupLocalhostTestAccounts, cleanupTestUserFromDB } from '@/e2e-tests/helpers/helper-functions';
+import {
+  cleanupMailsacInbox,
+  extractCustomVerificationToken,
+  getEmailContent,
+} from '@/e2e-tests/helpers/mailsac/mailsac';
+import { fillLoginForm, fillRegistrationForm } from '@/e2e-tests/helpers/tests';
+import { messages } from '@/lib/constants/messages/actions/messages';
 
 test.describe('User Registration and Email Verification Flow', () => {
   const { MAILSAC_API_KEY, TEST_EMAIL, TEST_PASSWORD, TEST_NAME } = TEST_CONFIG;
@@ -35,7 +40,7 @@ test.describe('User Registration and Email Verification Flow', () => {
     });
 
     await test.step('Verify success message', async () => {
-      const expectedMessage = 'Confirmation email sent!';
+      const expectedMessage = messages.register.success.REGISTRATION_COMPLETE;
       await expect(page.getByText(expectedMessage, { exact: false })).toBeVisible({ timeout: 5000 });
     });
   }
@@ -52,7 +57,7 @@ test.describe('User Registration and Email Verification Flow', () => {
     });
 
     await test.step('Verify confirmation requirement message', async () => {
-      await expect(page.getByText('Confirmation email already sent! Check your inbox!', { exact: true })).toBeVisible({
+      await expect(page.getByText(messages.login.errors.CONFIRMATION_EMAIL_ALREADY_SENT, { exact: true })).toBeVisible({
         timeout: 5000,
       });
     });
@@ -63,11 +68,11 @@ test.describe('User Registration and Email Verification Flow', () => {
       const emailContent = await getEmailContent(TEST_EMAIL, MAILSAC_API_KEY, 'Please confirm your email');
       expect(emailContent).toBeTruthy();
 
-      const verificationToken = await extractVerificationToken(emailContent);
-      expect(verificationToken).toBeTruthy();
+      const customVerificationToken = await extractCustomVerificationToken(emailContent);
+      expect(customVerificationToken).toBeTruthy();
 
-      await page.goto(`/new-verification?token=${verificationToken}`);
-      await expect(page.getByText('Email verified!')).toBeVisible();
+      await page.goto(`/new-verification?token=${customVerificationToken}`);
+      await expect(page.getByText(messages.new_verification_email.success.EMAIL_VERIFIED)).toBeVisible();
     });
 
     await test.step('Navigate to login', async () => {
