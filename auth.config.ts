@@ -24,11 +24,11 @@ const adapter = {
    * Used when sending magic links
    *
    * @note If it fails, the email will still be sent, a bug, or intended? Did not bother much.
-   * @note Remove id and hashedIp from the return object to match PrismaAdapter original patterns
+   * @note Remove id from the return object to match PrismaAdapter original patterns, we do not have id tho, currently.
    */
   async createVerificationToken(
     data: VerificationToken
-  ): Promise<{ identifier: string; expires: Date; token: string }> {
+  ): Promise<VerificationToken & { hashedIp: string }> {
     const hashedIp = await getHashedUserIpFromHeaders();
 
     const token = await db.verificationToken.create({
@@ -42,9 +42,6 @@ const adapter = {
 
     if ('id' in token) {
       delete (token as any).id;
-    }
-    if ('hashedIp' in token) {
-      delete (token as any).hashedIp;
     }
 
     return token;
