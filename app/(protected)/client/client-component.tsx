@@ -16,7 +16,8 @@ export default function ClientComponent() {
   const userSession: Session['user'] | undefined = useCurrentUser();
   return (
     <div className=''>
-      {/* This userInfo component is what we call a hybrid component, as children of a client component, is a client component */}
+      {/* This userInfo component is what we call a hybrid component,
+      as children of a client component, it is a client component */}
       <UserInfo label='💃Client component' user={userSession} />
     </div>
   );

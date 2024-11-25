@@ -31,11 +31,10 @@ declare module 'next-auth' {
   }
 
   interface VerificationToken {
-    id: string;
     identifier: string;
     expires: Date;
     token: string;
-    hashIp: string;
+    hashedIp: string;
   }
 }
 
@@ -49,6 +48,14 @@ export interface VerifiedUserForAuth {
   isOauth: boolean;
   emailVerified: Date | null;
   image: string | null;
+}
+
+declare module '@auth/core/adapters' {
+  interface AdapterUser {
+    role: UserRole;
+    isTwoFactorEnabled: boolean;
+    isOauth: boolean;
+  }
 }
 
 declare module 'next-auth/jwt' {

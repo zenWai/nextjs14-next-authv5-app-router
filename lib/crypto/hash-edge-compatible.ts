@@ -61,6 +61,7 @@ const verifyPassword = async (
     };
   } catch (error) {
     // likely an invalid or corrupted hash
+    console.error(error);
     return { isPasswordValid: false, passwordNeedsUpdate: true };
   }
 };
