@@ -5,7 +5,7 @@ import { UserRole } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { type Session } from 'next-auth';
 import { useState, useTransition } from 'react';
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { useForm, type UseFormReturn } from 'react-hook-form';
 import * as zod from 'zod';
 
 import { settingsAction } from '@/actions/settings';

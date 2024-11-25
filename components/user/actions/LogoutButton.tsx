@@ -2,7 +2,9 @@
 
 import { logoutAction } from '@/actions/logout';
 
-export const LogoutButton = (props: { children: React.ReactNode }) => {
+import type { ReactNode } from 'react';
+
+export const LogoutButton = (props: { children: ReactNode }) => {
   return (
     <span
       className='cursor-pointer'

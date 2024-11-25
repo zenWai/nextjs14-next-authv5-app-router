@@ -5,8 +5,10 @@ import { SocialButtons } from '@/components/auth/buttons/SocialButtons';
 import { AuthFormHeader } from '@/components/auth/shared/AuthFormHeader';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 
+import type { ReactNode } from 'react';
+
 interface CardWrapperProps {
-  children: React.ReactNode;
+  children: ReactNode;
   headerLabel: string;
   backButtonLabel: string;
   backButtonHref: string;

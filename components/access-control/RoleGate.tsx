@@ -3,8 +3,10 @@ import { UserRole } from '@prisma/client';
 import { FormError } from '@/components/forms/messages/FormError';
 import { currentSessionRole } from '@/lib/auth/auth-utils';
 
+import type { ReactNode } from 'react';
+
 interface RoleGateProps {
-  children: React.ReactNode;
+  children: ReactNode;
   allowedRole: UserRole;
 }
 
