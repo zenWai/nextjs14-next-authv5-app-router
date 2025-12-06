@@ -55,7 +55,7 @@
     "@eslint/eslintrc": "3.2.0",
     "@eslint/js": "9.15.0",
     "@next/eslint-plugin-next": "15.0.3",
-    "@playwright/test": "1.51.1",
+    "@playwright/test": "1.57.0",
     "@types/bcrypt": "5.0.2",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "22.9.3",
